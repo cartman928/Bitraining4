@@ -1,0 +1,24 @@
+function [g1, g2, g3] = MSE_b(Z11, Z12, Z13, Z21, Z22, Z23, Z31, Z32, Z33, g1, g2, g3, n0)
+%update filters by MSE criterion
+
+%MSE
+R1 = (Z11*g1)*(Z11*g1)'+(Z12*g2)*(Z12*g2)'+(Z13*g3)*(Z13*g3)'+n0*eye(2);
+R2 = (Z21*g1)*(Z21*g1)'+(Z22*g2)*(Z22*g2)'+(Z23*g3)*(Z23*g3)'+n0*eye(2);
+R3 = (Z31*g1)*(Z31*g1)'+(Z32*g2)*(Z32*g2)'+(Z33*g3)*(Z33*g3)'+n0*eye(2);
+
+P11 = Z11
+
+
+g1 = g1h';
+g2 = g2h';
+g3 = g3h';
+
+%Normalize
+
+g1 = g1/norm(g1);
+g2 = g2/norm(g2);
+g3 = g3/norm(g3);
+end
+
+    
+    
