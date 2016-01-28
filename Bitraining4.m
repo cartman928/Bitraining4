@@ -7,8 +7,8 @@ alpha = 0;    %coefficient for block fading model
 beta = 0.8^2;  %attenuation loss from non-direct antennas
 n0 = 10^(-2);    %noise variance
 
-iternums = 1:100; % number of iterations
-N_Realizations = 100;
+iternums = 1:50; % number of iterations
+N_Realizations = 1000;
 
 C1 = zeros(N_Realizations, length(iternums));
 C2 = zeros(N_Realizations, length(iternums));
@@ -79,22 +79,27 @@ for Realization = 1 : N_Realizations
             %norm(g1)^2
             %norm(g2)^2
 
-           % SINR1 = norm(g1'*(H11*v11+H12*v21))^2/(norm(g1'*(H11*v12+H12*v22))^2+n0*g1'*g1);
-            %SINR2 = norm(g2'*(H21*v12+H22*v22))^2/(norm(g2'*(H21*v11+H22*v21))^2+n0*g2'*g2);
-            %C1(Realization, numiters, traininglength) = abs(log2(1+SINR1));
-            %C2(Realization, numiters, traininglength) = abs(log2(1+SINR2));
+            SINR1 = norm(g1'*(H11*v11+H12*v21+H13*v31))^2/(norm(g1'*(H11*v12+H12*v22+H13*v32))^2+norm(g1'*(H11*v13+H12*v23+H13*v33))^2+n0*g1'*g1);
+            SINR2 = norm(g2'*(H21*v12+H22*v22+H23*v32))^2/(norm(g2'*(H21*v11+H22*v21+H23*v31))^2+norm(g2'*(H21*v13+H22*v23+H23*v33))^2+n0*g2'*g2);
+            SINR3 = norm(g3'*(H31*v13+H32*v23+H33*v33))^2/(norm(g3'*(H31*v12+H32*v22+H33*v32))^2+norm(g3'*(H31*v12+H32*v22+H33*v32))^2+n0*g3'*g3);
+            C1(Realization, numiters) = abs(log2(1+SINR1));
+            C2(Realization, numiters) = abs(log2(1+SINR2));
+            C3(Realization, numiters) = abs(log2(1+SINR3));
             end           
     
 end
 
 
 
-%{
 %% Plot C(bits/channel)
-figure
-hold on
+%figure
+%hold on
 
-p1=plot(iternums, mean(C1(:,:,10))+mean(C2(:,:,10)),'--');
+p1=plot(iternums, mean(C1)+mean(C2)+mean(C3),'--');
 
-axis([1 numiters 0 12])
+axis([1 numiters 0 20])
+
+xlabel('Number of iterations')
+ylabel('C(bits/channel)')
+title('Simple Receivers')
 %}
