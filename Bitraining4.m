@@ -7,7 +7,7 @@ alpha = 0;    %coefficient for block fading model
 beta = 0.8^2;  %attenuation loss from non-direct antennas
 n0 = 10^(-2);    %noise variance
 
-iternums = 1:5; % number of iterations
+iternums = 1:100; % number of iterations
 N_Realizations = 100;
 
 C1 = zeros(N_Realizations, length(iternums));
@@ -30,7 +30,6 @@ for Realization = 1 : N_Realizations
     H31 = (randn(2,2)+1i*randn(2,2))/sqrt(2/beta); 
     H32 = (randn(2,2)+1i*randn(2,2))/sqrt(2/beta);
     
-
     %Backward Channel
     Z11 = H11';
     Z22 = H22';
@@ -41,8 +40,7 @@ for Realization = 1 : N_Realizations
     Z21 = H12';
     Z23 = H32';
     Z31 = H13';
-    Z32 = H23';
-   
+    Z32 = H23';   
     
     %% one iteration per block
     g1 = rand(2, 1) + 1i*rand(2, 1);    
@@ -63,38 +61,35 @@ for Realization = 1 : N_Realizations
     v33 = zeros(2, 1); 
     
     for numiters = 1:length(iternums)
-        
+
         %% bi-directional training
             
             %%Backward Training: sudo-LS Algorithm
             %abs(error)<2*10^(-4)
-            [v11, v12, v13, v21, v22, v23, v31, v32, v33]= MSE_b(Z11, Z12, Z13, Z21, Z22, Z23, Z31, Z32, Z33, g1, g2, g3, n0);
+            [v11, v12, v13, v21, v22, v23, v31, v32, v33] = MSE_b(Z11, Z12, Z13, Z21, Z22, Z23, Z31, Z32, Z33, g1, g2, g3, n0);
             %[v11, v12, v13]
             %[v21, v22, v23]
             %[v31, v32, v33]
-            Power = [norm(v11)^2+norm(v12)^2+norm(v13)^2 norm(v21)^2+norm(v22)^2+norm(v23)^2 norm(v31)^2+norm(v32)^2+norm(v33)^2;
-            end
-
+            %Power = [norm(v11)^2+norm(v12)^2+norm(v13)^2 norm(v21)^2+norm(v22)^2+norm(v23)^2 norm(v31)^2+norm(v32)^2+norm(v33)^2]
+            
+          
 
             %%Forward Training: LS Algorithm
             [g1, g2, g3] = MSE_f(H11, H12, H13, H21, H22, H23, H31, H32, H33, v11, v12, v13, v21, v22, v23, v31, v32, v33, n0);
             %norm(g1)^2
             %norm(g2)^2
 
-            SINR1 = norm(g1'*(H11*v11+H12*v21))^2/(norm(g1'*(H11*v12+H12*v22))^2+n0*g1'*g1);
-            SINR2 = norm(g2'*(H21*v12+H22*v22))^2/(norm(g2'*(H21*v11+H22*v21))^2+n0*g2'*g2);
-            C1(Realization, numiters, traininglength) = abs(log2(1+SINR1));
-            C2(Realization, numiters, traininglength) = abs(log2(1+SINR2));
-        
-            
-    end
-            
+           % SINR1 = norm(g1'*(H11*v11+H12*v21))^2/(norm(g1'*(H11*v12+H12*v22))^2+n0*g1'*g1);
+            %SINR2 = norm(g2'*(H21*v12+H22*v22))^2/(norm(g2'*(H21*v11+H22*v21))^2+n0*g2'*g2);
+            %C1(Realization, numiters, traininglength) = abs(log2(1+SINR1));
+            %C2(Realization, numiters, traininglength) = abs(log2(1+SINR2));
+            end           
     
 end
 
 
 
-
+%{
 %% Plot C(bits/channel)
 figure
 hold on

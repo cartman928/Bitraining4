@@ -32,17 +32,20 @@ v33 = R3\P33;
 
 %Normalize
 
-v11 = v11/norm();
-v12 = R1\P12;
-v13 = R1\P13;
+M1 = sqrt(norm(v11)^2+norm(v12)^2+norm(v13)^2);
+v11 = v11/M1;
+v12 = v12/M1;
+v13 = v13/M1;
 
-v21 = R2\P21;
-v22 = R2\P22;
-v23 = R2\P23;
+M2 = sqrt(norm(v21)^2+norm(v22)^2+norm(v23)^2);
+v21 = v21/M2;
+v22 = v22/M2;
+v23 = v23/M2;
 
-v31 = R3\P31;
-v32 = R3\P32;
-v33 = R3\P33;
+M3 = sqrt(norm(v31)^2+norm(v32)^2+norm(v33)^2);
+v31 = v31/M3;
+v32 = v32/M3;
+v33 = v33/M3;
 end
 
     
