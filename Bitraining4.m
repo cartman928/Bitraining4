@@ -7,7 +7,7 @@ alpha = 0;    %coefficient for block fading model
 beta = 0.8^2;  %attenuation loss from non-direct antennas
 n0 = 10^(-2);    %noise variance
 
-iternums = 1:50; % number of iterations
+iternums = 1:300; % number of iterations
 N_Realizations = 100;
 
 C1 = zeros(N_Realizations, length(iternums));
