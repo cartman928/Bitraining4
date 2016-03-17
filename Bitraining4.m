@@ -7,8 +7,8 @@ alpha = 0;    %coefficient for block fading model
 beta = 0.8^2;  %attenuation loss from non-direct antennas
 n0 = 10^(-2);    %noise variance
 
-iternums = 1:300; % number of iterations
-N_Realizations = 100;
+iternums = 1:50; % number of iterations
+N_Realizations = 2;
 
 C1 = zeros(N_Realizations, length(iternums));
 C2 = zeros(N_Realizations, length(iternums));
@@ -71,7 +71,17 @@ for Realization = 1 : N_Realizations
             %[v21, v22, v23]
             %[v31, v32, v33]
             %Power = [norm(v11)^2+norm(v12)^2+norm(v13)^2 norm(v21)^2+norm(v22)^2+norm(v23)^2 norm(v31)^2+norm(v32)^2+norm(v33)^2]
-            
+            %{
+            v12 = [0;0];
+            v13 = [0;0];
+            v21 = [0;0];
+            v23 = [0;0];
+            v31 = [0;0];
+            v32 = [0;0];
+            v11 = v11/norm(v11);
+            v22 = v22/norm(v22);
+            v33 = v33/norm(v33);
+            %}
           
 
             %%Forward Training: LS Algorithm
